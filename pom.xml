@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>spring.aprendizaje</groupId>
-	<artifactId>ejemplo1</artifactId>
+	<artifactId>ejemplos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ejemplo1</name>
+	<name>ejemplos</name>
 	<description/>
 	<url/>
 	<licenses>
