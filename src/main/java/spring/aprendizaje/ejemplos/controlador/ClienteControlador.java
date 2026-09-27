@@ -8,7 +8,6 @@ import spring.aprendizaje.ejemplos.servicio.ClienteServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,54 +19,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@CrossOrigin("*")
 @RequestMapping("/api/clientes")
 public class ClienteControlador {
 
     @Autowired 
     private ClienteServicio clienteService;
 
-    @GetMapping("/list")
-    public List<Cliente> consultarTodo() {
-        return (clienteService.getClientes());
+    @GetMapping 
+    public ResponseEntity<List<Cliente>> findAll() {
+        return ResponseEntity.ok(clienteService.findAll());
     }
 
-    @GetMapping ("/list/{id}")
-    public Cliente buscaroPorId(@PathVariable Integer id) {
-        return clienteService.getCliente(id);
+    @GetMapping ("/{id}")
+    public ResponseEntity<Cliente> findById(@PathVariable("id") Integer idCliente) {
+        return clienteService.findById(idCliente).map(ResponseEntity::ok).orElseGet(()->ResponseEntity.notFound().build());
     }
 
-    @PostMapping ("/")
-    public ResponseEntity<Cliente> agregar(@RequestBody Cliente cliente) {
-        Cliente obj = clienteService.grabarCliente(cliente);
-        return new ResponseEntity<>(obj, HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {
+        return new ResponseEntity<>(clienteService.create(cliente), HttpStatus.CREATED);
     }
 
-    @PutMapping ("/")
-    public ResponseEntity<Cliente> editar(@RequestBody Cliente cliente) {
-        Cliente obj = clienteService.getCliente(cliente.getIdcliente());
-        if(obj != null) {
-            obj.setDireccion(cliente.getDireccion());
-            obj.setApellidos(cliente.getApellidos());
-            obj.setDocumento(cliente.getDocumento());
-            obj.setEmail(cliente.getEmail());
-            obj.setNombres(cliente.getNombres());
-            obj.setTipdoc(cliente.getTipdoc());
-            clienteService.grabarCliente(obj);
-        } else {
-            return new ResponseEntity<>(obj, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(obj, HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<Cliente> update(@RequestBody Cliente cliente) {
+        return clienteService.findById(cliente.getIdcliente()).map(c -> ResponseEntity.ok(clienteService.update(cliente))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping ("/{id}")
-    public ResponseEntity<Cliente> eliminar(@PathVariable Integer id) {
-        Cliente obj = clienteService.getCliente(id);
-        if(obj != null) {
-            clienteService.delete(id);
-        } else {
-            return new ResponseEntity<>(obj, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<>(obj, HttpStatus.OK);
+    public ResponseEntity<Cliente> delete(Integer idCliente) {
+        return clienteService.findById(idCliente).map(c -> {
+            clienteService.delete(idCliente);
+            return ResponseEntity.ok(c);
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
-}   
+}

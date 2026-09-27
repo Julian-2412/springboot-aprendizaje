@@ -1,32 +1,36 @@
 package spring.aprendizaje.ejemplos.servicio;
 
 import java.util.List;
-import jakarta.transaction.Transactional;   
+import java.util.Optional;  
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import spring.aprendizaje.ejemplos.modelo.Cliente;
-import spring.aprendizaje.ejemplos.repositorio.ClienteRepositorio;
+import spring.aprendizaje.ejemplos.repositorio.IClienteRepositorio;
 
 @Service
-@Transactional 
 public class ClienteServicio implements IClienteServicio {
 
     @Autowired
-    private ClienteRepositorio clienteRepo;
+    private IClienteRepositorio clienteRepo;
 
     @Override 
-    public List<Cliente> getClientes() {
+    public List<Cliente>  findAll() {
         return clienteRepo.findAll();
     }
 
     @Override
-    public Cliente getCliente(Integer id) {
-        return clienteRepo.findById(id).orElse(null);
+    public Optional<Cliente> findById(Integer id) {
+        return clienteRepo.findById(id);
     }
 
     @Override
-    public Cliente grabarCliente(Cliente cliente) {
+    public Cliente create(Cliente cliente) {
+        return clienteRepo.save(cliente);
+    }
+
+    @Override
+    public Cliente update(Cliente cliente) {
         return clienteRepo.save(cliente);
     }
 
