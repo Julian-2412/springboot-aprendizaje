@@ -1,6 +1,8 @@
 package spring.aprendizaje.ejemplos.controlador;
 
 import java.util.List;
+
+import spring.aprendizaje.ejemplos.modelo.LoginDto;
 import spring.aprendizaje.ejemplos.modelo.Usuario;
 import spring.aprendizaje.ejemplos.servicio.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,17 @@ public class UsuarioControlador {
         Usuario obj = usuarioServicio.nuevoUsuario(usuario);
         return new ResponseEntity<>(obj, HttpStatus.OK);
     }
+
+    @PostMapping ("/logincliente")
+    public int login(@RequestBody LoginDto usuario) {
+        int responseLogin = usuarioServicio.login(usuario);
+        return responseLogin;
+    }
+
+    @PostMapping ("/login")
+    public ResponseEntity<?> loginCliente(@RequestBody LoginDto usuario) {
+        return usuarioServicio.ingresar(usuario);
+    }   
 
     @PutMapping ("/")
     public ResponseEntity<Usuario> editar(@RequestBody Usuario usuario) {

@@ -34,7 +34,7 @@ public class Usuario {
     @Column(name = "nombreUsuario")
     private String nombreUsuario;
 
-    @Column(name = "correo")
+    @Column(name = "email")
     private String correo;
 
     public Usuario() {
@@ -105,4 +105,5 @@ public class Usuario {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
 }
