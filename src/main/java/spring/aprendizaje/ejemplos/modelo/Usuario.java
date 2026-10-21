@@ -1,109 +1,76 @@
-package spring.aprendizaje.ejemplos.modelo;
+    package spring.aprendizaje.ejemplos.modelo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;     
+    import jakarta.persistence.Column;
+    import jakarta.persistence.Entity;
+    import jakarta.persistence.FetchType;
+    import jakarta.persistence.GeneratedValue;
+    import jakarta.persistence.GenerationType;
+    import jakarta.persistence.Id;
+    import jakarta.persistence.JoinColumn;
+    import jakarta.persistence.Table;     
+    import jakarta.persistence.CascadeType;
+    import jakarta.persistence.OneToMany;
+    import com.fasterxml.jackson.annotation.JsonManagedReference;
+    import java.util.List;
 
-@Entity
-@Table(name = Usuario.TABLE_NAME)
-public class Usuario {
+    @Entity
+    @Table(name = Usuario.TABLE_NAME)
+    public class Usuario {
 
-    public static final String TABLE_NAME = "usuario";
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        public static final String TABLE_NAME = "usuarios";
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "idTipoDocumento")
-    private Tipodocumento idTipoDocumento;
+        @Column(name = "nombreUsuario", unique = true, nullable = false)
+        private String nombreUsuario;
 
-    @Column(name = "numeroDocumento")
-    private String numeroDocumento;
+        @Column(name = "password", nullable = false)
+        private String password;
 
-    @Column(name = "nombre")
-    private String nombre;
+        @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JsonManagedReference
+        private List<Transacciones> transacciones;
 
-    @Column(name = "password")
-    private String password;
+        public Usuario() {
+        }
 
-    @Column(name = "nombreUsuario")
-    private String nombreUsuario;
+        public Usuario(Long id, List<Transacciones> transacciones, String password, String nombreUsuario) {
+            this.id = id;
+            this.transacciones = transacciones;
+            this.password = password;
+            this.nombreUsuario = nombreUsuario;
+        }
 
-    @Column(name = "email")
-    private String correo;
+        public Long getId() {
+            return id;
+        }       
 
-    public Usuario() {
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public List<Transacciones> getTransacciones() {
+            return transacciones;
+        }
+
+        public void setTransacciones(List<Transacciones> transacciones) {
+            this.transacciones = transacciones;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getNombreUsuario() {
+            return nombreUsuario;
+        }
+
+        public void setNombreUsuario(String nombreUsuario) {
+            this.nombreUsuario = nombreUsuario;
+        }
     }
-
-    public Usuario(Long id, Tipodocumento idTipoDocumento, String numeroDocumento, String nombre, String password, String nombreUsuario, String correo) {
-        this.id = id;
-        this.idTipoDocumento = idTipoDocumento;
-        this.numeroDocumento = numeroDocumento;
-        this.nombre = nombre;
-        this.password = password;
-        this.nombreUsuario = nombreUsuario;
-        this.correo = correo;
-    }
-
-    public Long getId() {
-        return id;
-    }       
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Tipodocumento getIdTipoDocumento() {
-        return idTipoDocumento;
-    }
-
-    public void setIdTipoDocumento(Tipodocumento idTipoDocumento) {
-        this.idTipoDocumento = idTipoDocumento;
-    }
-
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
-
-    public void setNumeroDocumento(String numeroDocumento) {
-        this.numeroDocumento = numeroDocumento;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-}

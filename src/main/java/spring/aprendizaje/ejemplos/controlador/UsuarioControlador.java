@@ -3,6 +3,7 @@ package spring.aprendizaje.ejemplos.controlador;
 import java.util.List;
 
 import spring.aprendizaje.ejemplos.modelo.LoginDto;
+import spring.aprendizaje.ejemplos.modelo.Transacciones;
 import spring.aprendizaje.ejemplos.modelo.Usuario;
 import spring.aprendizaje.ejemplos.servicio.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/*"api/transacciones/respaldo"
+"api/transacciones/sincronizar"*/
 
 @RestController
 public class UsuarioControlador {
@@ -54,11 +57,7 @@ public class UsuarioControlador {
     public ResponseEntity<Usuario> editar(@RequestBody Usuario usuario) {
         Usuario obj = usuarioServicio.buscarUsuario(usuario.getId());
         if(obj != null) {
-            obj.setCorreo(usuario.getCorreo());
-            obj.setIdTipoDocumento(usuario.getIdTipoDocumento());
-            obj.setNombre(usuario.getNombre());
             obj.setNombreUsuario(usuario.getNombreUsuario());
-            obj.setNumeroDocumento(usuario.getNumeroDocumento());
             obj.setPassword(usuario.getPassword());
             usuarioServicio.nuevoUsuario(obj);
         } else {
@@ -76,5 +75,17 @@ public class UsuarioControlador {
             return new ResponseEntity<>(obj, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(obj, HttpStatus.OK);
+    }
+
+    @GetMapping("/usuarios/{usuarioId}/transacciones")
+    public List<Transacciones> obtenerTransacciones(@PathVariable Long usuarioId) {
+        return usuarioServicio.obtenerTransaccionesPorUsuario(usuarioId);
+    }
+
+    @PostMapping("/usuarios/{usuarioId}/transacciones")
+    public List<Transacciones> guardarTransacciones(
+            @PathVariable Long usuarioId,
+            @RequestBody List<Transacciones> transacciones) {
+        return usuarioServicio.guardarTransaccionesDeUsuario(usuarioId, transacciones);
     }
 }   

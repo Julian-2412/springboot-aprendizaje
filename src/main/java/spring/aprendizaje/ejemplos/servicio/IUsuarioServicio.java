@@ -3,6 +3,7 @@ package spring.aprendizaje.ejemplos.servicio;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import spring.aprendizaje.ejemplos.modelo.LoginDto;
+import spring.aprendizaje.ejemplos.modelo.Transacciones;
 import spring.aprendizaje.ejemplos.modelo.Usuario;
 
 public interface IUsuarioServicio {
@@ -18,4 +19,8 @@ public interface IUsuarioServicio {
     int login(LoginDto usuarioDto);
 
     ResponseEntity<?> ingresar(LoginDto usuarioDto);
+
+    List<Transacciones> obtenerTransaccionesPorUsuario(Long usuarioId);
+
+    List<Transacciones> guardarTransaccionesDeUsuario(Long usuarioId, List<Transacciones> transacciones);
 }
